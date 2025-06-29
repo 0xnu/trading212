@@ -21,12 +21,12 @@ Create an API key for the Trading212 by following these steps:
 
 ### Tests
 
-Execute this command: `go test -v`
+Execute this command: `make test`
 
 ### Demo
 
 + Update the API Key with your own inside [demo.go](./demo.go)
-+ Execute this command: `go run *.go`
++ Execute this command: `make run`
 
 ### Using the Trading212 API
 

@@ -294,6 +294,24 @@ func TestClientString(t *testing.T) {
 	}
 }
 
+// writeJSONResponse safely writes JSON response
+func writeJSONResponse(t *testing.T, w http.ResponseWriter, data interface{}) {
+	w.Header().Set("Content-Type", "application/json")
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(data); err != nil {
+		t.Errorf("Failed to encode JSON response: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
+}
+
+// writeErrorResponse safely writes error response
+func writeErrorResponse(t *testing.T, w http.ResponseWriter, statusCode int, message string) {
+	w.WriteHeader(statusCode)
+	if _, err := w.Write([]byte(message)); err != nil {
+		t.Errorf("Failed to write error response: %v", err)
+	}
+}
+
 // TestClientCash tests the Cash method with mock server
 func TestClientCash(t *testing.T) {
 	mockResponse := CashInfo{
@@ -312,8 +330,7 @@ func TestClientCash(t *testing.T) {
 			t.Error("Expected Authorization header")
 		}
 
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(mockResponse)
+		writeJSONResponse(t, w, mockResponse)
 	}))
 	defer server.Close()
 
@@ -346,8 +363,7 @@ func TestClientAccountInfo(t *testing.T) {
 			t.Errorf("Expected path /api/v0/equity/account/info, got %s", r.URL.Path)
 		}
 
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(mockResponse)
+		writeJSONResponse(t, w, mockResponse)
 	}))
 	defer server.Close()
 
@@ -387,8 +403,7 @@ func TestClientPortfolio(t *testing.T) {
 			t.Errorf("Expected path /api/v0/equity/portfolio, got %s", r.URL.Path)
 		}
 
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(mockResponse)
+		writeJSONResponse(t, w, mockResponse)
 	}))
 	defer server.Close()
 
@@ -417,8 +432,7 @@ func TestClientPortfolio(t *testing.T) {
 // TestClientErrorHandling tests error handling
 func TestClientErrorHandling(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(`{"code":"InvalidRequest","message":"Bad request"}`))
+		writeErrorResponse(t, w, http.StatusBadRequest, `{"code":"InvalidRequest","message":"Bad request"}`)
 	}))
 	defer server.Close()
 
@@ -460,8 +474,7 @@ func TestExportCSV(t *testing.T) {
 			t.Error("Expected IncludeDividends to be true")
 		}
 
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(mockResponse)
+		writeJSONResponse(t, w, mockResponse)
 	}))
 	defer server.Close()
 
