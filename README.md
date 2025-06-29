@@ -10,13 +10,13 @@ An unofficial Go library for interacting with the [Trading212](https://trading21
 
 ### Generating API Key
 
-Create an API key for the Trading212 by following these steps:
+Create an API key for Trading212 by following these steps:
 
 + Click the hamburger menu after logging into your Trading212 account
 + Scroll to the bottom
 + Click the green button "Switch to Practice"
 + Click Settings
-+ Cick "API (Beta)"
++ Click "API (Beta)"
 + Click "Generate API key"
 
 ### Tests
