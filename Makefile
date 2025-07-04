@@ -92,6 +92,7 @@ show-structure:
 help:
 	@echo "Available targets:"
 	@echo "  run           - Run the demo application"
+	@echo "  trade         - Run the trading example application"
 	@echo "  test          - Run tests"
 	@echo "  test-coverage - Run tests with coverage report"
 	@echo "  build         - Build the application"
