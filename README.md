@@ -8,6 +8,9 @@
 
 An unofficial Go library for interacting with the [Trading212](https://trading212.com) API.
 
+> [!WARNING]
+> Disclaimer: Using the Trading212 Golang library to create trading bots involves risks, including potential losses from market volatility and reliance on historical price patterns that may not predict future movements. External factors like news events and economic changes can also affect the bot's performance, so only invest money you can afford to lose.
+
 ### Generating API Key
 
 Create an API key for Trading212 by following these steps:
