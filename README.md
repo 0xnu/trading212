@@ -25,7 +25,7 @@ Execute this command: `make test`
 
 ### Demo
 
-+ Update the API Key with your own inside [demo.go](./demo.go)
++ Update the API Key with your own inside [here](./cmd/demo/main.go)
 + Execute this command: `make run`
 
 ### Using the Trading212 API
