@@ -21,7 +21,7 @@
 # Variables
 BINARY_NAME=trading212-demo
 BUILD_DIR=./build
-DEMO_FILES=demo.go main.go
+DEMO_FILES=cmd/demo/main.go
 
 # Default target
 all: fmt vet test build

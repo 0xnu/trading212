@@ -4,17 +4,18 @@ import (
 	"fmt"
 	"log"
 	"time"
+	"github.com/0xnu/trading212"
 )
 
 // TradingDemoRunner handles all trading operations
 type TradingDemoRunner struct {
-	client *Client
+	client *trading212.Client
 }
 
 // NewTradingDemoRunner creates a new demo runner instance
 func NewTradingDemoRunner(apiKey string, isDemo bool) *TradingDemoRunner {
 	return &TradingDemoRunner{
-		client: NewClient(apiKey, isDemo),
+		client: trading212.NewClient(apiKey, isDemo),
 	}
 }
 
