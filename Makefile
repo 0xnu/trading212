@@ -22,6 +22,7 @@
 BINARY_NAME=trading212-demo
 BUILD_DIR=./build
 DEMO_FILES=cmd/demo/main.go
+TRADING_FILE=cmd/demo/nvidia.go
 
 # Default target
 all: fmt vet test build
@@ -29,6 +30,10 @@ all: fmt vet test build
 # Run the demo application
 run:
 	go run $(DEMO_FILES)
+
+# Run the trading application
+trade:
+	go run $(TRADING_FILE)
 
 # Run tests
 test:

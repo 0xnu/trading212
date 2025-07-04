@@ -28,6 +28,11 @@ Execute this command: `make test`
 + Update the API Key with your own inside [here](./cmd/demo/main.go)
 + Execute this command: `make run`
 
+### Trading Example
+
++ Update the API Key with your own inside [here](./cmd/demo/nvidia.go)
++ Execute this command: `make trade`
+
 ### Using the Trading212 API
 
 You can read the [API documentation](https://t212public-api-docs.redoc.ly/) to understand what's possible with the Trading212 API.
