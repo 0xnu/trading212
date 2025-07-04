@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.3 - 2025-07-04 - @0xnu
+* Added [multi-stock trading bot](./cmd/demo/multistock.go) with Bollinger Bands and ATR strategy
+* Added Makefile targets for multi-stock trading
+* Updated README with multi-stock trading instructions
+* Created detailed documentation in [multistock.md](./cmd/demo/multistock.md)
+* Updated GitHub workflow for CodeQL analysis
+
 ## 1.0.2 - 2025-07-04 - @0xnu
 * Refinements
 

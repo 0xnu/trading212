@@ -23,6 +23,7 @@ BINARY_NAME=trading212-demo
 BUILD_DIR=./build
 DEMO_FILES=cmd/demo/main.go
 TRADING_FILE=cmd/demo/nvidia.go
+MULTISTOCK_FILE=cmd/demo/multistock.go
 
 # Default target
 all: fmt vet test build
@@ -34,6 +35,10 @@ run:
 # Run the trading application
 trade:
 	go run $(TRADING_FILE)
+
+# Run the multi-stock trading application
+multistock:
+	go run $(MULTISTOCK_FILE)
 
 # Run tests
 test:
@@ -93,6 +98,7 @@ help:
 	@echo "Available targets:"
 	@echo "  run           - Run the demo application"
 	@echo "  trade         - Run the trading example application"
+	@echo "  multistock    - Run the multi-stock trading application"
 	@echo "  test          - Run tests"
 	@echo "  test-coverage - Run tests with coverage report"
 	@echo "  build         - Build the application"
