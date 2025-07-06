@@ -13,7 +13,7 @@ func TestPriceDataStruct(t *testing.T) {
 		Low:   98.0,
 		Close: 100.5,
 	}
-	
+
 	if price.Price != 100.0 {
 		t.Errorf("Expected price 100.0, got %f", price.Price)
 	}
@@ -36,7 +36,7 @@ func TestTradingIndicatorsStruct(t *testing.T) {
 		LowerBand:  95.0,
 		StdDev:     2.5,
 	}
-	
+
 	if indicators.UpperBand <= indicators.MiddleBand {
 		t.Error("Upper band should be greater than middle band")
 	}
@@ -58,7 +58,7 @@ func TestStockDataStruct(t *testing.T) {
 		CurrentPrice: 100.0,
 		LastUpdate:   time.Now(),
 	}
-	
+
 	if stockData.Ticker != "TEST" {
 		t.Errorf("Expected ticker TEST, got %s", stockData.Ticker)
 	}
@@ -77,7 +77,7 @@ func TestTradingBotStruct(t *testing.T) {
 		atrPeriod:       14,
 		bollingerPeriod: 20,
 	}
-	
+
 	if bot.stocks == nil {
 		t.Error("Stocks map should not be nil")
 	}
@@ -94,26 +94,26 @@ func TestTradingBotStruct(t *testing.T) {
 
 func TestCalculateATR(t *testing.T) {
 	bot := &TradingBot{atrPeriod: 3}
-	
+
 	priceHistory := []PriceData{
 		{High: 102, Low: 98, Close: 100},
 		{High: 104, Low: 99, Close: 103},
 		{High: 105, Low: 101, Close: 102},
 		{High: 103, Low: 99, Close: 101},
 	}
-	
+
 	atr := bot.calculateATR(priceHistory)
 	if atr <= 0 {
 		t.Error("ATR should be positive")
 	}
-	
+
 	// Test with insufficient data
 	shortHistory := []PriceData{{High: 100, Low: 98, Close: 99}}
 	atr = bot.calculateATR(shortHistory)
 	if atr != 0 {
 		t.Error("ATR should be 0 with insufficient data")
 	}
-	
+
 	// Test edge case - exactly minimum data
 	minHistory := []PriceData{
 		{High: 102, Low: 98, Close: 100},
@@ -129,28 +129,28 @@ func TestCalculateATR(t *testing.T) {
 
 func TestCalculateBollingerBands(t *testing.T) {
 	bot := &TradingBot{bollingerPeriod: 3}
-	
+
 	priceHistory := []PriceData{
 		{Close: 100},
 		{Close: 102},
 		{Close: 98},
 	}
-	
+
 	upper, middle, lower, stdDev := bot.calculateBollingerBands(priceHistory)
-	
+
 	expectedMiddle := 100.0 // (100 + 102 + 98) / 3
 	if middle != expectedMiddle {
 		t.Errorf("Expected middle band %f, got %f", expectedMiddle, middle)
 	}
-	
+
 	if stdDev <= 0 {
 		t.Error("Standard deviation should be positive")
 	}
-	
+
 	if upper <= middle || lower >= middle {
 		t.Error("Upper band should be above middle, lower band below middle")
 	}
-	
+
 	// Test with insufficient data
 	shortHistory := []PriceData{{Close: 100}}
 	upper, middle, lower, stdDev = bot.calculateBollingerBands(shortHistory)
@@ -164,7 +164,7 @@ func TestCalculateIndicators(t *testing.T) {
 		atrPeriod:       14,
 		bollingerPeriod: 20,
 	}
-	
+
 	// Create sufficient price history
 	priceHistory := make([]PriceData, 25)
 	basePrice := 100.0
@@ -176,9 +176,9 @@ func TestCalculateIndicators(t *testing.T) {
 			Close: price,
 		}
 	}
-	
+
 	indicators := bot.calculateIndicators(priceHistory)
-	
+
 	if indicators.ATR <= 0 {
 		t.Error("ATR should be positive")
 	}
@@ -191,7 +191,7 @@ func TestCalculateIndicators(t *testing.T) {
 	if indicators.LowerBand >= indicators.MiddleBand {
 		t.Error("Lower band should be below middle band")
 	}
-	
+
 	// Test with insufficient data
 	shortHistory := []PriceData{{High: 100, Low: 98, Close: 99}}
 	indicators = bot.calculateIndicators(shortHistory)
@@ -203,7 +203,7 @@ func TestCalculateIndicators(t *testing.T) {
 func TestStockDataInitialisation(t *testing.T) {
 	stocks := make(map[string]*StockData)
 	tickers := []string{"AAPL", "GOOGL", "MSFT"}
-	
+
 	for _, ticker := range tickers {
 		stocks[ticker] = &StockData{
 			Ticker:       ticker,
@@ -211,11 +211,11 @@ func TestStockDataInitialisation(t *testing.T) {
 			LastUpdate:   time.Now(),
 		}
 	}
-	
+
 	if len(stocks) != 3 {
 		t.Errorf("Expected 3 stocks, got %d", len(stocks))
 	}
-	
+
 	for _, ticker := range tickers {
 		if stocks[ticker] == nil {
 			t.Errorf("Stock data for %s should not be nil", ticker)
@@ -231,9 +231,9 @@ func TestPriceHistoryManagement(t *testing.T) {
 		Ticker:       "TEST",
 		PriceHistory: make([]PriceData, 0),
 	}
-	
+
 	maxHistory := 20
-	
+
 	// Add more than max history
 	for i := 0; i < 25; i++ {
 		priceData := PriceData{
@@ -241,17 +241,17 @@ func TestPriceHistoryManagement(t *testing.T) {
 			Close: float64(100 + i),
 		}
 		stockData.PriceHistory = append(stockData.PriceHistory, priceData)
-		
+
 		// Simulate trimming logic
 		if len(stockData.PriceHistory) > maxHistory {
 			stockData.PriceHistory = stockData.PriceHistory[len(stockData.PriceHistory)-maxHistory:]
 		}
 	}
-	
+
 	if len(stockData.PriceHistory) != maxHistory {
 		t.Errorf("Expected %d price history entries, got %d", maxHistory, len(stockData.PriceHistory))
 	}
-	
+
 	// Check that latest prices are kept
 	latestPrice := stockData.PriceHistory[len(stockData.PriceHistory)-1].Price
 	expectedLatest := 124.0 // 100 + 24
@@ -262,26 +262,26 @@ func TestPriceHistoryManagement(t *testing.T) {
 
 func TestATRCalculationEdgeCases(t *testing.T) {
 	bot := &TradingBot{atrPeriod: 2}
-	
+
 	// Test with identical prices (no volatility)
 	stablePrices := []PriceData{
 		{High: 100, Low: 100, Close: 100},
 		{High: 100, Low: 100, Close: 100},
 		{High: 100, Low: 100, Close: 100},
 	}
-	
+
 	atr := bot.calculateATR(stablePrices)
 	if atr != 0 {
 		t.Errorf("Expected ATR 0 for stable prices, got %f", atr)
 	}
-	
+
 	// Test with extreme volatility
 	volatilePrices := []PriceData{
 		{High: 100, Low: 90, Close: 95},
 		{High: 110, Low: 95, Close: 105},
 		{High: 120, Low: 100, Close: 110},
 	}
-	
+
 	atr = bot.calculateATR(volatilePrices)
 	if atr <= 0 {
 		t.Error("ATR should be positive for volatile prices")
@@ -290,16 +290,16 @@ func TestATRCalculationEdgeCases(t *testing.T) {
 
 func TestBollingerBandsEdgeCases(t *testing.T) {
 	bot := &TradingBot{bollingerPeriod: 3}
-	
+
 	// Test with identical prices
 	stablePrices := []PriceData{
 		{Close: 100},
 		{Close: 100},
 		{Close: 100},
 	}
-	
+
 	upper, middle, lower, stdDev := bot.calculateBollingerBands(stablePrices)
-	
+
 	if middle != 100.0 {
 		t.Errorf("Expected middle band 100.0, got %f", middle)
 	}
@@ -314,7 +314,7 @@ func TestBollingerBandsEdgeCases(t *testing.T) {
 // Benchmark tests
 func BenchmarkCalculateATR(b *testing.B) {
 	bot := &TradingBot{atrPeriod: 14}
-	
+
 	priceHistory := make([]PriceData, 100)
 	for i := 0; i < 100; i++ {
 		price := 100.0 + float64(i%10)
@@ -324,7 +324,7 @@ func BenchmarkCalculateATR(b *testing.B) {
 			Close: price,
 		}
 	}
-	
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		bot.calculateATR(priceHistory)
@@ -333,13 +333,13 @@ func BenchmarkCalculateATR(b *testing.B) {
 
 func BenchmarkCalculateBollingerBands(b *testing.B) {
 	bot := &TradingBot{bollingerPeriod: 20}
-	
+
 	priceHistory := make([]PriceData, 100)
 	for i := 0; i < 100; i++ {
 		price := 100.0 + float64(i%10)
 		priceHistory[i] = PriceData{Close: price}
 	}
-	
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		bot.calculateBollingerBands(priceHistory)
@@ -351,7 +351,7 @@ func BenchmarkCalculateIndicators(b *testing.B) {
 		atrPeriod:       14,
 		bollingerPeriod: 20,
 	}
-	
+
 	priceHistory := make([]PriceData, 50)
 	for i := 0; i < 50; i++ {
 		price := 100.0 + math.Sin(float64(i)*0.1)*10 // Sine wave price movement
@@ -361,7 +361,7 @@ func BenchmarkCalculateIndicators(b *testing.B) {
 			Close: price,
 		}
 	}
-	
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		bot.calculateIndicators(priceHistory)

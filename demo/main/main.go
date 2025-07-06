@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/0xnu/trading212"
 	"log"
 	"time"
-	"github.com/0xnu/trading212"
 )
 
 // TradingDemoRunner handles all trading operations

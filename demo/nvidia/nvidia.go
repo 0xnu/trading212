@@ -1,11 +1,11 @@
 package main
 
 import (
+	"github.com/0xnu/trading212"
 	"log"
-	"time"
 	"math"
 	"strings"
-	"github.com/0xnu/trading212"
+	"time"
 )
 
 type TradingBot struct {
@@ -29,7 +29,7 @@ func NewTradingBot(apiKey string, isDemo bool, ticker string, riskPercent float6
 
 func main() {
 	log.Println("Starting trading bot...")
-	
+
 	bot := NewTradingBot("your_api_key", true, "NVDA", 1.0)
 	bot.Run()
 }
@@ -37,7 +37,7 @@ func main() {
 func (bot *TradingBot) Run() {
 	for {
 		log.Println("Starting new iteration...")
-		
+
 		if bot.executeTradeLogic() {
 			log.Println("Trade logic executed successfully")
 		} else {
@@ -45,7 +45,7 @@ func (bot *TradingBot) Run() {
 			time.Sleep(5 * time.Minute)
 			continue
 		}
-		
+
 		time.Sleep(5 * time.Minute)
 	}
 }
@@ -55,35 +55,35 @@ func (bot *TradingBot) executeTradeLogic() bool {
 	if positions == nil {
 		return false
 	}
-	
+
 	currentPrice := bot.getCurrentPrice()
 	if currentPrice == 0 {
 		log.Println("Failed to get current price")
 		return false
 	}
-	
+
 	upperBand, lowerBand := bot.calculateBollingerBands(currentPrice)
 	portfolioValue := bot.calculatePortfolioValue(positions)
 	positionSize := bot.calculatePositionSize(portfolioValue, currentPrice)
 	hasPosition := bot.hasExistingPosition(positions)
-	
+
 	return bot.executeTrade(hasPosition, currentPrice, upperBand, lowerBand, positionSize)
 }
 
 func (bot *TradingBot) getPositionsWithRetry() []trading212.Position {
 	config := RetryConfig{maxRetries: 5, baseDelay: time.Second}
-	
+
 	for i := 0; i < config.maxRetries; i++ {
 		positions, err := bot.client.Portfolio()
 		if err == nil {
 			return positions
 		}
-		
+
 		if !bot.shouldRetry(err, i, config) {
 			break
 		}
 	}
-	
+
 	return nil
 }
 
@@ -92,12 +92,12 @@ func (bot *TradingBot) shouldRetry(err error, attempt int, config RetryConfig) b
 		log.Printf("API error: %v", err)
 		return false
 	}
-	
+
 	if attempt >= config.maxRetries-1 {
 		log.Printf("Failed after retries: %v", err)
 		return false
 	}
-	
+
 	delay := time.Duration(math.Pow(2, float64(attempt))) * config.baseDelay
 	log.Printf("Rate limited, retry %d/%d in %v", attempt+1, config.maxRetries, delay)
 	time.Sleep(delay)
@@ -110,15 +110,15 @@ func (bot *TradingBot) getCurrentPrice() float64 {
 		log.Printf("Portfolio error: %v", err)
 		return 0
 	}
-	
+
 	log.Printf("Got %d positions", len(positions))
-	
+
 	for _, pos := range positions {
 		if pos.Ticker == bot.ticker {
 			return pos.Value / pos.Quantity
 		}
 	}
-	
+
 	return 0
 }
 
@@ -158,11 +158,11 @@ func (bot *TradingBot) executeTrade(hasPosition bool, currentPrice, upperBand, l
 	if bot.shouldBuy(hasPosition, currentPrice, lowerBand) {
 		return bot.placeBuyOrder(positionSize, currentPrice)
 	}
-	
+
 	if bot.shouldSell(hasPosition, currentPrice, upperBand) {
 		return bot.placeSellOrder(positionSize, currentPrice)
 	}
-	
+
 	return true
 }
 
@@ -180,7 +180,7 @@ func (bot *TradingBot) placeBuyOrder(positionSize int, currentPrice float64) boo
 		log.Printf("Buy error: %v", err)
 		return false
 	}
-	
+
 	log.Printf("Bought %d %s @ %.2f (Bollinger Band strategy)", positionSize, bot.ticker, currentPrice)
 	return true
 }
@@ -191,7 +191,7 @@ func (bot *TradingBot) placeSellOrder(positionSize int, currentPrice float64) bo
 		log.Printf("Sell error: %v", err)
 		return false
 	}
-	
+
 	log.Printf("Sold %d %s @ %.2f (Bollinger Band strategy)", positionSize, bot.ticker, currentPrice)
 	return true
 }

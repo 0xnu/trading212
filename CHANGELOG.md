@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.5 - 2025-07-06 - @0xnu
+* Refinements
+
 ## 1.0.4 - 2025-07-06 - @0xnu
 * Refinements
 * Tests

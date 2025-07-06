@@ -2,14 +2,14 @@ package main
 
 import (
 	"errors"
+	"github.com/0xnu/trading212"
 	"testing"
 	"time"
-	"github.com/0xnu/trading212"
 )
 
 func TestNewTradingBot(t *testing.T) {
 	bot := NewTradingBot("test_key", true, "NVDA", 1.0)
-	
+
 	if bot.ticker != "NVDA" {
 		t.Errorf("Expected ticker NVDA, got %s", bot.ticker)
 	}
@@ -24,12 +24,12 @@ func TestNewTradingBot(t *testing.T) {
 func TestCalculateBollingerBands(t *testing.T) {
 	bot := &TradingBot{}
 	currentPrice := 100.0
-	
+
 	upper, lower := bot.calculateBollingerBands(currentPrice)
-	
+
 	expectedUpper := 104.0 // 100 + (2 * 2.0)
 	expectedLower := 96.0  // 100 - (2 * 2.0)
-	
+
 	if upper != expectedUpper {
 		t.Errorf("Expected upper band %f, got %f", expectedUpper, upper)
 	}
@@ -42,14 +42,14 @@ func TestCalculatePositionSize(t *testing.T) {
 	bot := &TradingBot{riskPercent: 2.0}
 	portfolioValue := 10000.0
 	currentPrice := 100.0
-	
+
 	size := bot.calculatePositionSize(portfolioValue, currentPrice)
 	expected := 2 // (10000 * 2 / 100) / 100 = 2
-	
+
 	if size != expected {
 		t.Errorf("Expected position size %d, got %d", expected, size)
 	}
-	
+
 	// Test minimum position size
 	smallPortfolio := 50.0
 	size = bot.calculatePositionSize(smallPortfolio, currentPrice)
@@ -65,14 +65,14 @@ func TestCalculatePortfolioValue(t *testing.T) {
 		{Value: 1500.0},
 		{Value: 2500.0},
 	}
-	
+
 	value := bot.calculatePortfolioValue(positions)
 	expected := 5000.0
-	
+
 	if value != expected {
 		t.Errorf("Expected portfolio value %f, got %f", expected, value)
 	}
-	
+
 	// Test empty positions
 	emptyPositions := []trading212.Position{}
 	value = bot.calculatePortfolioValue(emptyPositions)
@@ -83,25 +83,25 @@ func TestCalculatePortfolioValue(t *testing.T) {
 
 func TestHasExistingPosition(t *testing.T) {
 	bot := &TradingBot{ticker: "NVDA"}
-	
+
 	positions := []trading212.Position{
 		{Ticker: "AAPL", Quantity: 10},
 		{Ticker: "NVDA", Quantity: 5},
 	}
-	
+
 	if !bot.hasExistingPosition(positions) {
 		t.Error("Expected to find existing position")
 	}
-	
+
 	positionsWithoutNVDA := []trading212.Position{
 		{Ticker: "AAPL", Quantity: 10},
 		{Ticker: "GOOGL", Quantity: 5},
 	}
-	
+
 	if bot.hasExistingPosition(positionsWithoutNVDA) {
 		t.Error("Expected no existing position")
 	}
-	
+
 	// Test empty positions
 	emptyPositions := []trading212.Position{}
 	if bot.hasExistingPosition(emptyPositions) {
@@ -111,7 +111,7 @@ func TestHasExistingPosition(t *testing.T) {
 
 func TestShouldBuyAndSell(t *testing.T) {
 	bot := &TradingBot{}
-	
+
 	// Test buy conditions
 	if !bot.shouldBuy(false, 95.0, 100.0) {
 		t.Error("Should buy when no position and price below lower band")
@@ -122,7 +122,7 @@ func TestShouldBuyAndSell(t *testing.T) {
 	if bot.shouldBuy(false, 105.0, 100.0) {
 		t.Error("Should not buy when price above lower band")
 	}
-	
+
 	// Test sell conditions
 	if !bot.shouldSell(true, 105.0, 100.0) {
 		t.Error("Should sell when have position and price above upper band")
@@ -138,18 +138,18 @@ func TestShouldBuyAndSell(t *testing.T) {
 func TestShouldRetry(t *testing.T) {
 	bot := &TradingBot{}
 	config := RetryConfig{maxRetries: 3, baseDelay: time.Millisecond}
-	
+
 	// Test rate limit error
 	rateLimitErr := errors.New("TooManyRequests")
 	if !bot.shouldRetry(rateLimitErr, 0, config) {
 		t.Error("Should retry on rate limit error")
 	}
-	
+
 	// Test max retries exceeded
 	if bot.shouldRetry(rateLimitErr, 2, config) {
 		t.Error("Should not retry when max retries reached")
 	}
-	
+
 	// Test non-rate limit error
 	otherErr := errors.New("Other error")
 	if bot.shouldRetry(otherErr, 0, config) {
@@ -159,7 +159,7 @@ func TestShouldRetry(t *testing.T) {
 
 func TestExecuteTrade(t *testing.T) {
 	bot := &TradingBot{}
-	
+
 	// Test no action case
 	result := bot.executeTrade(false, 100.0, 105.0, 95.0, 1)
 	if !result {
@@ -172,7 +172,7 @@ func TestRetryConfig(t *testing.T) {
 		maxRetries: 5,
 		baseDelay:  time.Second,
 	}
-	
+
 	if config.maxRetries != 5 {
 		t.Errorf("Expected maxRetries 5, got %d", config.maxRetries)
 	}
@@ -185,7 +185,7 @@ func TestRetryConfig(t *testing.T) {
 func BenchmarkCalculateBollingerBands(b *testing.B) {
 	bot := &TradingBot{}
 	currentPrice := 100.0
-	
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		bot.calculateBollingerBands(currentPrice)
@@ -196,7 +196,7 @@ func BenchmarkCalculatePositionSize(b *testing.B) {
 	bot := &TradingBot{riskPercent: 1.0}
 	portfolioValue := 10000.0
 	currentPrice := 100.0
-	
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		bot.calculatePositionSize(portfolioValue, currentPrice)
