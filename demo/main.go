@@ -31,7 +31,8 @@ func (t *TradingDemoRunner) Run() {
 	t.fetchAndDisplayPies()
 	t.fetchAndDisplayDividends()
 	t.fetchAndDisplayTransactions()
-	t.requestCSVExport()
+	t.placeTestOrder()
+	t.createTestPie()
 
 	fmt.Println("\nDemo completed successfully!")
 }
@@ -168,8 +169,6 @@ func (t *TradingDemoRunner) requestCSVExport() {
 	fmt.Printf("Export requested successfully: %v\n", exportResult)
 }
 
-// Commented trading operations for reference
-/*
 // placeTestOrder demonstrates placing a limit order
 func (t *TradingDemoRunner) placeTestOrder() {
 	fmt.Println("\nPlacing limit order...")
@@ -185,20 +184,19 @@ func (t *TradingDemoRunner) placeTestOrder() {
 func (t *TradingDemoRunner) createTestPie() {
 	fmt.Println("\nCreating a demo pie...")
 	instrumentShares := map[string]float64{
-		"LLOY": 40.0,  // Lloyds Banking Group
-		"VOD":  30.0,  // Vodafone
-		"BP":   30.0,  // BP plc
+		"PLTR_US_EQ": 0.40, // Palantir Technologies - 40%
+		"AAPL_US_EQ": 0.30, // Apple Inc - 30%
+		"MSFT_US_EQ": 0.30, // Microsoft Corporation - 30%
 	}
 
 	endDate := time.Now().AddDate(1, 0, 0) // 1 year from now
-	pie, err := t.client.PieCreate("REINVEST", endDate, 10000, "Tech", "UK Giants", instrumentShares)
+	pie, err := t.client.PieCreate("REINVEST", endDate, 10000, "Tech", "Big Tech Portfolio", instrumentShares)
 	if err != nil {
 		log.Printf("Error creating pie: %v", err)
 		return
 	}
 	fmt.Printf("Pie created successfully: %s (ID: %d)\n", pie.Name, pie.ID)
 }
-*/
 
 func main() {
 	demoRunner := NewTradingDemoRunner("your_api_key", true)

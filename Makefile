@@ -21,16 +21,16 @@
 # Variables
 BINARY_NAME=trading212-demo
 BUILD_DIR=./build
-DEMO_FILES=cmd/demo/main.go
-TRADING_FILE=cmd/demo/nvidia.go
-MULTISTOCK_FILE=cmd/demo/multistock.go
+DEMO_FILE=demo/main.go
+TRADING_FILE=demo/nvidia.go
+MULTISTOCK_FILE=demo/multistock.go
 
 # Default target
 all: fmt vet test build
 
 # Run the demo application
 run:
-	go run $(DEMO_FILES)
+	go run $(DEMO_FILE)
 
 # Run the trading application
 trade:
@@ -52,7 +52,7 @@ test-coverage:
 # Build the application
 build:
 	mkdir -p $(BUILD_DIR)
-	go build -o $(BUILD_DIR)/$(BINARY_NAME) $(DEMO_FILES)
+	go build -o $(BUILD_DIR)/$(BINARY_NAME) $(DEMO_FILE)
 
 # Clean build artifacts
 clean:
