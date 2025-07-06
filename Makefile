@@ -21,9 +21,9 @@
 # Variables
 BINARY_NAME=trading212-demo
 BUILD_DIR=./build
-DEMO_FILE=demo/main.go
-TRADING_FILE=demo/nvidia.go
-MULTISTOCK_FILE=demo/multistock.go
+DEMO_FILE=demo/main/main.go
+TRADING_FILE=demo/nvidia/nvidia.go
+MULTISTOCK_FILE=demo/multistock/multistock.go
 
 # Default target
 all: fmt vet test build

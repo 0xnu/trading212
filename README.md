@@ -28,17 +28,17 @@ Execute this command: `make test`
 
 ### Demo
 
-+ Update the API Key with your own inside [here](./cmd/demo/main.go)
++ Update the API Key with your own inside [here](./demo/main/main.go)
 + Execute this command: `make run`
 
 ### Single Stock Trading
 
-+ Update the API Key with your own inside [here](./cmd/demo/nvidia.go)
++ Update the API Key with your own inside [here](./demo/nvidia/nvidia.go)
 + Execute this command: `make trade`
 
 ### Multi-Stock Trading
 
-+ Update the API Key with your own inside [here](./cmd/demo/multistock.go)
++ Update the API Key with your own inside [here](./demo/multistock/multistock.go)
 + Execute this command: `make multistock`
 
 ### Using the Trading212 API
