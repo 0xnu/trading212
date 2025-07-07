@@ -41,12 +41,8 @@ $$LB = MB - (2 \times \sigma)$$
 #### Average True Range (ATR)
 This measures how much a stock typically moves each day:
 
-**True Range:**
-$$TR = \max\begin{cases} 
-H_t - L_t \\ 
-|H_t - C_{t-1}| \\ 
-|L_t - C_{t-1}| 
-\end{cases}$$
+**True Range:**  
+$TR = \max(H_t - L_t,\ |H_t - C_{t-1}|,\ |L_t - C_{t-1}|)$
 
 **Average True Range:**
 $$ATR = \frac{1}{n} \sum_{i=1}^{n} TR_i$$
