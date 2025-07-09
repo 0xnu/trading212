@@ -24,6 +24,7 @@ BUILD_DIR=./build
 DEMO_FILE=demo/main/main.go
 TRADING_FILE=demo/nvidia/nvidia.go
 MULTISTOCK_FILE=demo/multistock/multistock.go
+ROBOADVISOR_FILE=demo/roboadvisor/roboadvisor.go
 
 # Default target
 all: fmt vet test build
@@ -39,6 +40,10 @@ trade:
 # Run the multi-stock trading application
 multistock:
 	go run $(MULTISTOCK_FILE)
+
+# Run the robo-advisor application
+roboadvisor:
+	go run $(ROBOADVISOR_FILE)
 
 # Run tests
 test:

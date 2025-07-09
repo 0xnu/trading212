@@ -1,3 +1,5 @@
 pkg
 push.sh
 vendor
+robo_advisor_*
+monthly_report_*
