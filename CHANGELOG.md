@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.7 - 2025-07-09 - @0xnu
+* Test
+
 ## 1.0.6 - 2025-07-09 - @0xnu
 * [Robo-Advisor](./demo/roboadvisor/roboadvisor.go) Demo
 
