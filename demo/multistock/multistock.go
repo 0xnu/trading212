@@ -1,12 +1,13 @@
 package main
 
 import (
-	"github.com/0xnu/trading212"
 	"log"
 	"math"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/0xnu/trading212"
 )
 
 type PriceData struct {
