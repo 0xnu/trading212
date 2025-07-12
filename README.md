@@ -4,7 +4,7 @@
 [![Release](https://img.shields.io/github/release/0xnu/trading212.svg)](https://github.com/0xnu/trading212/releases/latest)
 [![Go Report Card](https://goreportcard.com/badge/github.com/0xnu/trading212)](https://goreportcard.com/report/github.com/0xnu/trading212)
 [![Go Reference](https://pkg.go.dev/badge/github.com/0xnu/trading212.svg)](https://pkg.go.dev/github.com/0xnu/trading212)
-[![License](https://img.shields.io/github/license/0xnu/trading212)](/LICENSE)
+[![License](https://img.shields.io/badge/License-Modified_MIT-f5de53?&color=f5de53)](/LICENSE)
 
 An unofficial Go library for interacting with the [Trading212](https://trading212.com) API.
 
